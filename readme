@@ -1,0 +1,27 @@
+Descrição do Projeto
+Este projeto demonstra a aplicação de regressão linear simples, múltipla e não-linear em dados simulados, utilizando o método dos mínimos quadrados. O objetivo é explorar técnicas de modelagem e otimização para ajustar modelos de regressão e avaliar a performance através da análise de resíduos.
+
+Instalação
+Para executar o projeto, você precisará ter o R instalado no seu sistema. Para instalar o R, siga as instruções no site oficial: https://www.r-project.org/.
+
+Caso deseje rodar o código em um ambiente Jupyter Notebook com suporte a R, você precisará do IRkernel, que pode ser instalado com os comandos:
+
+R
+Copiar código
+install.packages('IRkernel')
+IRkernel::installspec()  # para registrar o kernel no Jupyter
+Como Executar
+Abra o R ou seu ambiente de desenvolvimento preferido (por exemplo, RStudio).
+Carregue o script e execute o código passo a passo, ou copie e cole o conteúdo do código para rodar diretamente.
+O código irá gerar gráficos que mostram as previsões e os resíduos para cada modelo de regressão, e ao final apresenta uma otimização para um modelo não-linear utilizando o método BFGS.
+Estrutura dos Arquivos
+regressao_linear.R: Script principal que contém o código para realizar:
+Regressão linear simples usando o método dos mínimos quadrados.
+Regressão linear múltipla com variáveis quadráticas.
+Regressão não-linear usando otimização com o método BFGS.
+/figuras: Diretório (opcional) onde os gráficos podem ser salvos se o código for modificado para isso.
+Tecnologias Utilizadas
+Linguagem: R
+Bibliotecas: Nenhuma biblioteca adicional é necessária além do R base.
+Autores e Colaboradores
+Nome do Autor: MATHEUS SOUZA DA SILVA LEITE/PEDRO DE SOUZA TORRES GRUPO 79
