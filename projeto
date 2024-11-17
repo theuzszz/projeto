@@ -1,0 +1,135 @@
+# REGRESSÃO LINEAR SIMPLES
+
+x = seq(0, 1, length=10)
+y = x^2
+
+# construir o modelo exato
+#x = y 
+
+plot(x, y)
+
+b = sum( (x - mean(x)) * (y - mean(y)) ) /
+    sum( (x - mean(x))^2 )
+
+a = mean(y) - b*mean(x)
+
+# predição
+pred = a + b*x
+
+# resíduo (erro)
+residuo = (y - pred) ^ 2
+
+points(x, pred, pch='+', col=2)
+
+matplot(x, cbind(y, pred) )
+
+print( lm(y ~ x) )
+
+hist(residuo)
+boxplot(residuo)
+
+# REGRESSÃO LINEAR SIMPLES - MÍNIMOS QUADRADOS
+
+x = seq(0, 1, length=10)
+y = x^2
+
+# X agora é uma matriz
+X = cbind(1, x)
+
+# %*% é multiplicação vetorial
+# cálculo de todos os betas
+betas = solve(t(X)%*%X)%*%(t(X)%*%y)
+
+# multiplicação vetorial do X pelos betas
+pred = X %*% betas
+
+# REGRESSÃO LINEAR MÚLTIPLA - MÍNIMOS QUADRADOS
+# teremos mais de um valor
+
+x = seq(0.0001, 1, length=10)
+y = x^2
+
+# modelo:
+# y = b0 + b1x + b2x^2
+X = cbind(1, x, x^2)
+
+# calcular correlação entre variáveis preditivas
+cor(X[, -1])
+
+matplot(x, X[,2:3])
+
+betas = solve(t(X)%*%X)%*%(t(X)%*%y)
+
+# y = X * betas
+pred = X %*% betas
+
+matplot(x, cbind(y, pred), type='o' )
+
+
+# REGRESSÃO LINEAR NÃO LINEAR
+# NÃO FUNCIONA O MÉTODO DOS MÍNIMOS QUADRDOS
+
+# exemplo de modelo não-linear
+# y = sqrt(b * x)
+
+x = seq(0.0001, 1, length=10)
+y = sqrt(3 * x) / (3.14 + log(x))
+
+# modelo
+#X = cbind(1, x, sqrt(x))
+
+X = cbind(1, x, sqrt(x) / log(x+0.01))
+
+# Calcular correlação entre variáveis preditivas
+cor(X[, -1])
+
+matplot(x, X[,2:3])
+
+betas = solve(t(X)%*%X)%*%(t(X)%*%y)
+
+pred = X %*% betas
+
+matplot(x, cbind(y, pred), type='o' )
+
+residuo = (y - pred)
+
+boxplot(residuo)
+
+### otimização não-linear
+
+objfun = function (b, y, x) {
+  # b[1] é a constante
+  pred = b[1] + (sqrt(b[2] * x) / (b[3] + log(x)))
+  # objetivo é minimzar sum
+  sum((y - pred)^2)
+}
+
+# validação da função objetivo
+print (objfun(c(0, 3, 3.14), y, x))
+
+# função auxiliar que chama objfun
+# a otimização só recebe um argumento, y e x são globais
+objfun2 = function (b){
+  # restrição: tem que garantir que b é maior que 0
+  # foi colcoado 1e10 porque Inf dava erro
+  if (b[2] < 0) return (1e10)
+  objfun(b, y, x)
+}
+
+print (objfun2(c(1e-7, 3, 3.14)))
+
+# chute inicial
+# (1,2,3) é uma solução próximo do ótimo, por isso atingiu
+# BFGS é uma técnica de busca local
+# precisa-se otimizar três valores
+modelo = optim (c(0,200,3000), objfun2, method = "BFGS" )
+
+betas = matrix(modelo$par, ncol=1)
+
+pred = betas[1] + (sqrt(betas[2] * x) / (betas[3] + log(x)))
+
+matplot(x, cbind(y, pred), type='o' )
+
+residuo = (y - pred)
+
+boxplot(residuo)
